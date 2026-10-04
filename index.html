@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Планер подготовки к ВСО (МЭСК) по четвертям</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF1FB;--ink:#14213D;--mut:#4B5675;--hl:#FFD23F;--teal:#0E9F9A;--line:#D5DBF0}
+*{box-sizing:border-box;margin:0}
+body{font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-bottom:60px}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+h1,h2,h3{font-family:Unbounded,Manrope,sans-serif;line-height:1.2}
+h1{font-size:clamp(22px,5vw,34px);font-weight:800}
+h1 mark{background:linear-gradient(transparent 58%,var(--hl) 58%);color:inherit}
+h2{font-size:19px;margin-bottom:8px}
+h3{font-size:14px;margin:16px 0 8px}
+.top{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding:28px 0 16px}
+.mut{color:var(--mut);font-size:14px}
+button,input,select,textarea{font:inherit;color:inherit}
+input,select{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;min-width:0}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid var(--teal);outline-offset:1px}
+.b{background:var(--ink);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:800;cursor:pointer}
+.b.y{background:var(--hl);color:var(--ink)}
+.x{background:none;border:0;color:var(--mut);cursor:pointer;font-size:13px}
+.x:hover{color:#C0392B}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px}
+.tabs button{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font-weight:700;cursor:pointer}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.panel{display:none}.panel.on{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+.row>input:not([type]){flex:1;min-width:140px}
+label{font-size:13px;color:var(--mut);display:flex;flex-direction:column;gap:4px}
+.row label{flex-direction:row;align-items:center;gap:8px}
+.sc{overflow-x:auto}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.chip{border:1px dashed var(--teal);background:#fff;color:var(--teal);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:13px;font-weight:600}
+.chip.on{background:var(--teal);color:#fff;border-style:solid}
+.lg{font-size:13px;display:flex;gap:6px;align-items:center}
+.sub{border-left:6px solid var(--c)}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--c);flex:none;display:inline-block}
+.nm{font-weight:800;flex:1}
+ul{list-style:none;padding:0}
+li{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+li label{flex:1;flex-direction:row;color:var(--ink);font-size:15px;align-items:center;gap:8px}
+li.dn label{text-decoration:line-through;color:var(--mut)}
+.qb{font-size:12px;background:var(--bg);border-radius:6px;padding:2px 8px;color:var(--mut)}
+textarea{width:100%;min-height:240px;border:1px solid var(--line);border-radius:12px;padding:12px;resize:vertical}
+.bar{height:12px;background:var(--bg);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.brow{display:grid;grid-template-columns:1fr 140px;gap:10px;align-items:center;margin-top:8px;font-size:14px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+th.cur{background:var(--hl)}
+.tt{display:grid;gap:10px}
+.col h4{font-size:14px;margin-bottom:6px}
+.blk{border-left:5px solid var(--c);background:var(--bg);border-radius:8px;padding:6px 10px;margin-bottom:6px;font-size:13px;display:flex;flex-direction:column}
+.blk small{color:var(--mut)}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:5}
+#toast.on{opacity:1}
+@media print{.noprint{display:none!important}.panel{display:none!important}#po{display:block!important}body{background:#fff}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Планер подготовки к <mark>ВСО (МЭСК)</mark></h1>
+    <div class="row noprint" style="margin:0">
+      <button class="b y" data-act="dl">⬇ Скачать планер</button>
+      <button class="b" data-act="print">🖨 PDF / печать</button>
+    </div>
+  </div>
+  <div class="tabs noprint" id="tabs">
+    <button data-act="tab" data-t="o">Обзор и график</button>
+    <button data-act="tab" data-t="1">1 четверть</button>
+    <button data-act="tab" data-t="2">2 четверть</button>
+    <button data-act="tab" data-t="3">3 четверть</button>
+    <button data-act="tab" data-t="4">4 четверть</button>
+    <button data-act="tab" data-t="s">Предметы и время</button>
+    <button data-act="tab" data-t="n">Заметки</button>
+  </div>
+  <div class="panel" id="po"></div><div class="panel" id="p1"></div><div class="panel" id="p2"></div><div class="panel" id="p3"></div><div class="panel" id="p4"></div><div class="panel" id="ps"></div><div class="panel" id="pn"></div>
+  <p class="mut noprint">Данные сохраняются в вашем браузере. Чтобы получить готовый файл, нажмите «Скачать планер».</p>
+</div>
+<div id="toast"></div>
+<script id="seed" type="application/json"></script>
+<script>
+const DAYS=[['mon','Пн'],['tue','Вт'],['wed','Ср'],['thu','Чт'],['fri','Пт'],['sat','Сб'],['sun','Вс']];
+const COLORS=['#0E9F9A','#E4572E','#5B5BD6','#D99A00','#2A9D5C','#C2409B','#3B82C4','#8A5A44'];
+const PRESETS=['Математика','Физика','Химия','Биология','История Казахстана','Английский язык','Русский язык','Казахский язык','Информатика','География'];
+const $=id=>document.getElementById(id);
+const uid=()=>Math.random().toString(36).slice(2,8);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toMin=t=>{const[a,b]=(t||'0:0').split(':');return +a*60+ +b};
+const fmt=m=>String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const bar=(p,c)=>`<div class="bar"><i style="width:${p}%;background:${c}"></i></div>`;
+const def=()=>({q:1,subjects:[],qnotes:{1:'',2:'',3:'',4:''},notes:'',saved:0});
+let tab='o';
+function load(){let a=null,b=null;
+  try{a=JSON.parse(localStorage.getItem('vso_planner'))}catch(e){}
+  try{b=JSON.parse($('seed').textContent)}catch(e){}
+  const s=[a,b].filter(Boolean).sort((x,y)=>(y.saved||0)-(x.saved||0))[0]||def();
+  s.qnotes=s.qnotes||{1:'',2:'',3:'',4:''};s.subjects=s.subjects||[];return s}
+let S=load();
+function save(){S.saved=Date.now();try{localStorage.setItem('vso_planner',JSON.stringify(S))}catch(e){}}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
+const stat=ts=>{const n=ts.length,d=ts.filter(t=>t.done).length;return{n,d,p:n?Math.round(d/n*100):0}};
+const qStat=q=>stat(S.subjects.flatMap(s=>s.topics.filter(t=>t.q==q)));
+
+function chart(){
+  const ss=S.subjects;
+  if(!ss.length)return'<p class="mut">Добавьте предметы и темы, и здесь появится график.</p>';
+  const W=700,x0=44,y0=205,ph=170,gw=(W-x0-10)/4,bw=Math.min(28,(gw-30)/ss.length);
+  let g='';
+  [0,50,100].forEach(v=>{const y=y0-v/100*ph;g+=`<line x1="${x0}" x2="${W-10}" y1="${y}" y2="${y}" stroke="#D5DBF0"/><text x="${x0-8}" y="${y+4}" text-anchor="end" font-size="11" fill="#4B5675">${v}%</text>`});
+  for(let q=1;q<=4;q++){
+    const gx=x0+(q-1)*gw+(gw-bw*ss.length)/2,cx=x0+(q-1)*gw+gw/2,st=qStat(q);
+    ss.forEach((s,k)=>{const p=stat(s.topics.filter(t=>t.q==q)).p,h=Math.max(p/100*ph,2);
+      g+=`<rect x="${gx+k*bw}" y="${y0-h}" width="${bw-3}" height="${h}" rx="4" fill="${s.color}"><title>${esc(s.name)}, ${q} четверть: ${p}%</title></rect>`});
+    g+=`<text x="${cx}" y="${y0+20}" text-anchor="middle" font-size="13" font-weight="800" fill="${q==S.q?'#0E9F9A':'#14213D'}">${q} четверть</text><text x="${cx}" y="${y0+37}" text-anchor="middle" font-size="12" fill="#4B5675">${st.p}% (${st.d}/${st.n})</text>`}
+  return`<svg viewBox="0 0 700 250" width="100%" role="img" aria-label="График прогресса по четвертям">${g}</svg><div class="chips">${ss.map(s=>`<span class="lg"><b class="dot" style="--c:${s.color}"></b>${esc(s.name)}</span>`).join('')}</div>`}
+
+function renderO(){
+  const all=stat(S.subjects.flatMap(s=>s.topics));
+  let h=`<div class="card"><h2>Общий прогресс</h2><div class="brow">${bar(all.p,'var(--teal)')}<span>${all.d}/${all.n} тем · ${all.p}%</span></div>
+  <div class="row noprint"><label>Сейчас идет <select data-act="q">${[1,2,3,4].map(v=>`<option value="${v}" ${v==S.q?'selected':''}>${v} четверть</option>`).join('')}</select></label></div></div>
+  <div class="card"><h2>График по четвертям</h2><p class="mut">Столбцы: доля пройденных тем по каждому предмету. Строится сам из ваших данных.</p>${chart()}</div>`;
+  if(S.subjects.length){
+    h+=`<div class="card"><h2>Цели по четвертям</h2><div class="sc"><table><tr><th>Предмет</th>${[1,2,3,4].map(q=>`<th class="${q==S.q?'cur':''}">${q} четверть</th>`).join('')}<th>Цель, балл</th></tr>${S.subjects.map(s=>`<tr><td><b style="color:${s.color}">${esc(s.name)}</b></td>${[1,2,3,4].map(q=>`<td>${esc(s.goals[q])||'—'}</td>`).join('')}<td>${esc(s.target)||'—'}</td></tr>`).join('')}</table></div></div>`;
+    const dd=DAYS.filter(([k])=>S.subjects.some(s=>s.days.includes(k)));
+    if(dd.length)h+=`<div class="card"><h2>Расписание недели</h2><div class="sc"><div class="tt" style="grid-template-columns:repeat(${dd.length},minmax(130px,1fr))">${dd.map(([k,n])=>`<div class="col"><h4>${n}</h4>${S.subjects.filter(s=>s.days.includes(k)).sort((a,b)=>toMin(a.time)-toMin(b.time)).map(s=>`<div class="blk" style="--c:${s.color}"><small>${fmt(toMin(s.time))}–${fmt(toMin(s.time)+(+s.mins||0))}</small><b>${esc(s.name)}</b></div>`).join('')}</div>`).join('')}</div></div></div>`}
+  if(S.notes.trim())h+=`<div class="card"><h2>Заметки для подготовки</h2><p style="white-space:pre-wrap">${esc(S.notes)}</p></div>`;
+  $('po').innerHTML=h}
+
+function renderQ(q){
+  const st=qStat(q);
+  let h=`<div class="card"><div class="row" style="margin:0;justify-content:space-between"><h2 style="margin:0">${q} четверть</h2>${S.q==q?'<span class="qb">● идет сейчас</span>':`<button class="x noprint" data-act="setq" data-q="${q}">Сделать текущей</button>`}</div><div class="brow">${bar(st.p,'var(--teal)')}<span>${st.d}/${st.n} тем · ${st.p}%</span></div></div>`;
+  if(!S.subjects.length)h+='<div class="card mut">Сначала добавьте предметы на вкладке «Предметы и время».</div>';
+  S.subjects.forEach((s,i)=>{
+    const ts=s.topics.map((t,j)=>[t,j]).filter(([t])=>t.q==q),ss=stat(ts.map(x=>x[0]));
+    h+=`<div class="card sub" style="--c:${s.color}"><div class="row" style="margin:0"><b class="dot"></b><b class="nm">${esc(s.name)}</b><span class="mut">${ss.d}/${ss.n} · ${ss.p}%</span></div><div style="margin-top:8px">${bar(ss.p,s.color)}</div>
+    <label style="margin-top:12px">Цель на четверть<input placeholder="Например: закрыть алгебру" value="${esc(s.goals[q])}" data-act="goal" data-f="${q}" data-i="${i}"></label>
+    <h3>Темы</h3><div class="row" style="margin-top:0"><input id="tn${q}_${i}" placeholder="Новая тема" data-enter="addtopic" data-i="${i}" data-q="${q}"><button class="b" data-act="addtopic" data-i="${i}" data-q="${q}">Добавить</button></div>
+    <ul>${ts.map(([t,j])=>`<li class="${t.done?'dn':''}"><label><input type="checkbox" data-act="done" data-i="${i}" data-j="${j}" ${t.done?'checked':''}>${esc(t.title)}</label><button class="x" data-act="deltopic" data-i="${i}" data-j="${j}">✕</button></li>`).join('')}</ul></div>`});
+  h+=`<div class="card"><h2>Заметки четверти</h2><textarea style="min-height:110px" data-qn="${q}" placeholder="Что важно не забыть в этой четверти">${esc(S.qnotes[q])}</textarea></div>`;
+  $('p'+q).innerHTML=h}
+
+function renderS(){
+  const free=PRESETS.filter(p=>!S.subjects.some(s=>s.name==p));
+  let h=`<div class="card"><h2>Предметы, которые вы сдаете</h2><div class="row"><input id="sn" placeholder="Название предмета" data-enter="addsub"><button class="b" data-act="addsub">Добавить</button></div><div class="chips">${free.map(p=>`<button class="chip" data-act="addsub" data-name="${p}">+ ${p}</button>`).join('')}</div></div>`;
+  S.subjects.forEach((s,i)=>{
+    h+=`<div class="card sub" style="--c:${s.color}"><div class="row" style="margin:0"><b class="dot"></b><input class="nm" value="${esc(s.name)}" data-act="sub" data-f="name" data-i="${i}"><button class="x" data-act="delsub" data-i="${i}">Удалить</button></div>
+    <h3>Удобные дни недели</h3><div class="chips" style="margin-top:0">${DAYS.map(([k,n])=>`<button class="chip ${s.days.includes(k)?'on':''}" data-act="dayt" data-i="${i}" data-k="${k}">${n}</button>`).join('')}</div>
+    <div class="row"><label>Время начала <input type="time" value="${s.time}" data-act="sub" data-f="time" data-i="${i}"></label><label>Минут <input type="number" style="width:80px" min="15" max="300" step="15" value="${s.mins}" data-act="sub" data-f="mins" data-i="${i}"></label><label>Цель, балл <input type="number" style="width:80px" min="0" max="100" value="${esc(s.target)}" data-act="sub" data-f="target" data-i="${i}"></label></div></div>`});
+  $('ps').innerHTML=h}
+
+function renderN(){
+  $('pn').innerHTML=`<div class="card"><h2>Заметки для подготовки</h2><p class="mut" style="margin-bottom:10px">Советы, формулы, слабые места, даты пробников, всё, что важно не забыть.</p><textarea id="notes" placeholder="Начните писать...">${esc(S.notes)}</textarea></div>`}
+
+function download(){
+  $('seed').textContent=JSON.stringify(S).replace(/</g,'\\u003c');
+  const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+  a.download='moy-planer-vso.html';document.body.appendChild(a);a.click();a.remove();toast('Планер скачан')}
+
+function act(a,t){
+  const i=+t.dataset.i,j=+t.dataset.j,q=+t.dataset.q;
+  if(a=='tab'){tab=t.dataset.t}
+  else if(a=='addsub'){const n=(t.dataset.name||$('sn').value).trim();if(!n)return;S.subjects.push({id:uid(),name:n,color:COLORS[S.subjects.length%COLORS.length],target:'',days:['mon','wed','fri'],time:'16:00',mins:60,goals:{1:'',2:'',3:'',4:''},topics:[]})}
+  else if(a=='delsub'){if(!confirm('Удалить предмет и все его темы?'))return;S.subjects.splice(i,1)}
+  else if(a=='dayt'){const d=S.subjects[i].days,k=t.dataset.k;d.includes(k)?d.splice(d.indexOf(k),1):d.push(k)}
+  else if(a=='addtopic'){const v=$(`tn${q}_${i}`).value.trim();if(!v)return;S.subjects[i].topics.push({id:uid(),title:v,q,done:false})}
+  else if(a=='deltopic'){S.subjects[i].topics.splice(j,1)}
+  else if(a=='setq'){S.q=q}
+  else if(a=='dl'){download();return}
+  else if(a=='print'){tab='o';render();window.print();return}
+  save();render()}
+
+document.addEventListener('click',e=>{const t=e.target.closest('button[data-act]');if(t)act(t.dataset.act,t)});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.dataset.enter)act(e.target.dataset.enter,e.target)});
+document.addEventListener('input',e=>{const t=e.target;
+  if(t.id=='notes'){S.notes=t.value;save()}
+  else if(t.dataset.qn){S.qnotes[t.dataset.qn]=t.value;save()}});
+document.addEventListener('change',e=>{
+  const t=e.target,a=t.dataset.act;if(!a||t.tagName=='BUTTON')return;
+  const i=+t.dataset.i,j=+t.dataset.j,f=t.dataset.f;
+  if(a=='q')S.q=+t.value;
+  else if(a=='sub')S.subjects[i][f]=f=='mins'?(+t.value||60):t.value;
+  else if(a=='goal')S.subjects[i].goals[f]=t.value;
+  else if(a=='done')S.subjects[i].topics[j].done=t.checked;
+  save();render()});
+
+function render(){
+  renderO();[1,2,3,4].forEach(renderQ);renderS();renderN();
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id=='p'+tab));
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t==tab))}
+render();
+</script>
+</body>
+</html>
